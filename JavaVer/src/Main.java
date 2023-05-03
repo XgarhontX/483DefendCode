@@ -1,13 +1,37 @@
-public class Main {
-    public static void main(String[] args) {
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+public class Main {
+    private static final boolean DEBUG_ECHO = false;
+    private static final Scanner CONSOLE = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        String nameFirst = promptUserNameFirst();
+        String nameLast = promptUserNameLast();
     }
 
     /**
-     * First & Last Name
+     * First name
      */
-    private static void promptUserName() {
-
+    private static String promptUserNameFirst() {
+        return doRetrieveInput(
+                "Enter a first name.",
+                "[A-Z, 0-9, ', ., -]",
+                "^[a-z0-9.\\s-'.]+$",
+                Pattern.CASE_INSENSITIVE
+        );
+    }
+    /**
+     * Last name
+     */
+    private static String promptUserNameLast() {
+        return doRetrieveInput(
+                "Enter a last name.",
+                "[A-Z, 0-9, ', ., -]",
+                "^[a-z0-9.\\s-'.]+$",
+                Pattern.CASE_INSENSITIVE
+        );
     }
 
     /**
@@ -54,5 +78,57 @@ public class Main {
      */
     private static void writeOutput() {
 
+    }
+
+    /**
+     * Helper to use regex. <br>
+     * From Java tutorials.
+     *
+     * @param matcher
+     * @return
+     */
+    private static int doRegex(Matcher matcher) {
+        int found = 0;
+        if (matcher.find()) {
+            if (DEBUG_ECHO) {
+                System.out.printf("\"%s\": Found match from index %d to %d.\n",
+                        matcher.group(), matcher.start(), matcher.end());
+            }
+            found++;
+        }
+//        while (matcher.find()) {
+//            System.out.printf("\"%s\": Found match \"%s\" from index %d to %d.\n",
+//                    matcherString, matcher.group(), matcher.start(), matcher.end());
+//            found++;
+//        }
+        if (found == 0 && DEBUG_ECHO) {
+            System.out.printf("No match found.\n");
+        }
+
+        return found;
+    }
+
+    private static String doInputPrompting(String prompt, String description) {
+        //print
+        System.out.println();
+        System.out.println(prompt);
+        System.out.println(description);
+        System.out.print(">");
+
+        //read
+        String result = CONSOLE.nextLine();
+
+        return result.trim();
+    }
+
+    private static String doRetrieveInput(String prompt, String description, String regex, Integer patternParam) {
+        String result = "";
+        while (result.length() < 1) {
+            String in = doInputPrompting(prompt, description);
+            if ((patternParam != null ? doRegex(Pattern.compile(regex, patternParam).matcher(in)) : doRegex(Pattern.compile(regex).matcher(in)) )== 1) {
+                result = in;
+            }
+        }
+        return result;
     }
 }

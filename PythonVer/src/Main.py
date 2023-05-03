@@ -1,8 +1,12 @@
 if __name__ == '__main__':
     print("hello")
 
-# First & Last Name
-def promptUserName():
+# First Name
+def promptUserNameFirst():
+    return
+
+# Last Name
+def promptUserNameLast():
     return
 
 # 2 Ints
