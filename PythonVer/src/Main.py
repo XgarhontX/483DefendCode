@@ -1,13 +1,53 @@
-if __name__ == '__main__':
-    print("hello")
+import re
 
+def doRetreiveInput(prompt, description, regex, pattern_param):
+    result = None
+    while result == None:
+        # get input
+        string = doInputPrompting(prompt, description)
+
+        # compile regex
+        if pattern_param == None:
+            regexc = re.compile(regex)
+        else:
+            regexc = re.compile(regex, pattern_param)
+        # match
+        result = regexc.match(string)
+        if result == None: print("No match found.")
+
+    return result
+
+
+def doInputPrompting(prompt, description):
+    # print
+    print()
+    print(prompt)
+    print(description)
+    print('>', end=" ")
+
+    # read
+    result = str(input())
+
+    return result.strip()
+
+NAME_REGEX = "^[a-z0-9\s'\.\-]+$"
 # First Name
-def promptUserNameFirst():
-    return
+def promptNameFirst():
+    return doRetreiveInput(
+        "Enter a first name.",
+        "50 chars max: [A-Z, 0-9, ', ., -]",
+        NAME_REGEX,
+        re.IGNORECASE
+    )
 
 # Last Name
-def promptUserNameLast():
-    return
+def promptNameLast():
+    return doRetreiveInput(
+        "Enter a last name.",
+        "50 chars max: [A-Z, 0-9, ', ., -]",
+        NAME_REGEX,
+        re.IGNORECASE
+    )
 
 # 2 Ints
 def prompt2Ints():
@@ -36,3 +76,7 @@ def promptPasswordRetype():
 # -Each thing written should be clearly labeled (e.g. First name, Last name, First Integer, Second Integer, Sum, Product, Input File Name, Input file contents)
 def writeOutput():
     return
+
+if __name__ == '__main__':
+    nameFirst = promptNameFirst()
+    nameLast = promptNameLast()
