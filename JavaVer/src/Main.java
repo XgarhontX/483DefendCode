@@ -7,29 +7,30 @@ public class Main {
     private static final Scanner CONSOLE = new Scanner(System.in);
 
     public static void main(String[] args) {
-        String nameFirst = promptUserNameFirst();
-        String nameLast = promptUserNameLast();
+        String nameFirst = promptNameFirst();
+        String nameLast = promptNameLast();
     }
 
+    private static final String NAME_REGEX = "^[a-z0-9\\s'\\.\\-]+$";
     /**
      * First name
      */
-    private static String promptUserNameFirst() {
+    private static String promptNameFirst() {
         return doRetrieveInput(
                 "Enter a first name.",
-                "[A-Z, 0-9, ', ., -]",
-                "^[a-z0-9.\\s-'.]+$",
+                "50 chars max: [A-Z, 0-9, ', ., -]",
+                NAME_REGEX,
                 Pattern.CASE_INSENSITIVE
         );
     }
     /**
      * Last name
      */
-    private static String promptUserNameLast() {
+    private static String promptNameLast() {
         return doRetrieveInput(
                 "Enter a last name.",
-                "[A-Z, 0-9, ', ., -]",
-                "^[a-z0-9.\\s-'.]+$",
+                "50 chars max: [A-Z, 0-9, ', ., -]",
+                NAME_REGEX,
                 Pattern.CASE_INSENSITIVE
         );
     }
@@ -101,8 +102,8 @@ public class Main {
 //                    matcherString, matcher.group(), matcher.start(), matcher.end());
 //            found++;
 //        }
-        if (found == 0 && DEBUG_ECHO) {
-            System.out.printf("No match found.\n");
+        if (found == 0) {
+            System.out.println("No match found.");
         }
 
         return found;
@@ -113,7 +114,7 @@ public class Main {
         System.out.println();
         System.out.println(prompt);
         System.out.println(description);
-        System.out.print(">");
+        System.out.print("> ");
 
         //read
         String result = CONSOLE.nextLine();
