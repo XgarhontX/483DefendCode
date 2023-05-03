@@ -7,6 +7,7 @@ public class Main {
     private static final Scanner CONSOLE = new Scanner(System.in);
 
     public static void main(String[] args) {
+        System.out.println("\nJAVA VERSION");
         String nameFirst = promptNameFirst();
         String nameLast = promptNameLast();
 

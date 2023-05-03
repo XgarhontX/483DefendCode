@@ -16,8 +16,6 @@ def doRetreiveInput(prompt, description, regex, pattern_param):
         if result == None: print("No match found.")
 
     return result
-
-
 def doInputPrompting(prompt, description):
     # print
     print()
@@ -29,7 +27,33 @@ def doInputPrompting(prompt, description):
     result = str(input())
 
     return result.strip()
+########################################################################################################################
+def doRetreiveInputInt(prompt, description):
+    result = None
+    while result == None:
+        result = doInputPromptingInt(prompt, description)
+    return result
+def doInputPromptingInt(prompt, description):
+    # print
+    print()
+    print(prompt)
+    print(description)
+    print('>', end=" ")
 
+    # read
+    try:
+        result = int(input())
+    except:
+        print("No match found.")
+        return None
+
+    #check range
+    if (result < -2147483648 or result > 2147483647):
+        print("No match found.")
+        return None
+
+    return result
+########################################################################################################################
 NAME_REGEX = "^[a-z0-9\s'\.\-]{1,50}$"
 # First Name
 def promptNameFirst():
@@ -50,8 +74,17 @@ def promptNameLast():
     )
 
 # 2 Ints
-def prompt2Ints():
+def prompt2Ints1():
+    return doRetreiveInputInt(
+        "Enter the 1st int.",
+        "Range: (-2147483648, 2147483647)",
+    )
     return
+def prompt2Ints2():
+    return doRetreiveInputInt(
+        "Enter the 2nd int.",
+        "Range: (-2147483648, 2147483647)",
+    )
 
 # Input file name/path
 def promptInFileName():
@@ -78,5 +111,8 @@ def writeOutput():
     return
 
 if __name__ == '__main__':
+    print("\nPYTHON VERSION")
     nameFirst = promptNameFirst()
     nameLast = promptNameLast()
+    int1 = prompt2Ints1()
+    int2 = prompt2Ints2()
