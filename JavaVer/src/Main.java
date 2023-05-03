@@ -44,7 +44,7 @@ public class Main {
      * 2 Ints 1st
      */
     private static int prompt2Ints1() {
-        return doInputPromptingInt(
+        return doRetrieveInputInt(
                 "Enter the 1st int.",
                 "Range: (" + Integer.MIN_VALUE + ", " + Integer.MAX_VALUE + ")"
         );
@@ -54,7 +54,7 @@ public class Main {
      * 2 Ints 2nd
      */
     private static int prompt2Ints2() {
-        return doInputPromptingInt(
+        return doRetrieveInputInt(
                 "Enter the 2nd int.",
                 "Range: (" + Integer.MIN_VALUE + ", " + Integer.MAX_VALUE + ")"
         );
@@ -127,6 +127,17 @@ public class Main {
         return found;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private static String doRetrieveInput(String prompt, String description, String regex, Integer patternParam) {
+        String result = "";
+        while (result.length() < 1) {
+            String in = doInputPrompting(prompt, description);
+            if ((patternParam != null ? doRegex(Pattern.compile(regex, patternParam).matcher(in)) : doRegex(Pattern.compile(regex).matcher(in))) == 1) {
+                result = in;
+            }
+        }
+        return result;
+    }
     private static String doInputPrompting(String prompt, String description) {
         //print
         System.out.println();
@@ -139,29 +150,15 @@ public class Main {
 
         return result.trim();
     }
-
-    private static String doRetrieveInput(String prompt, String description, String regex, Integer patternParam) {
-        String result = "";
-        while (result.length() < 1) {
-            String in = doInputPrompting(prompt, description);
-            if ((patternParam != null ? doRegex(Pattern.compile(regex, patternParam).matcher(in)) : doRegex(Pattern.compile(regex).matcher(in))) == 1) {
-                result = in;
-            }
-        }
-        return result;
-    }
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     private static int doRetrieveInputInt(String prompt, String description) {
         Integer result = null;
         while (result == null) {
-            result = doRetrieveInputInt(prompt, description);
-            if (result == null) {
-                System.out.println("No match found.");
-            }
+            result = doInputPromptingInt(prompt, description);
         }
+        return result;
     }
-
-    private static int doInputPromptingInt(String prompt, String description) {
+    private static Integer doInputPromptingInt(String prompt, String description) {
         //print
         System.out.println();
         System.out.println(prompt);
@@ -171,7 +168,12 @@ public class Main {
         //read
         String line = CONSOLE.nextLine().trim();
         Scanner lineScanner = new Scanner(line);
-        int result = lineScanner.nextInt();
+        Integer result = null;
+        try {
+            result = lineScanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("No match found.");
+        }
         lineScanner.close();
 
         return result;
