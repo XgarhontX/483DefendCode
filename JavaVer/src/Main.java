@@ -11,7 +11,7 @@ public class Main {
         String nameLast = promptNameLast();
     }
 
-    private static final String NAME_REGEX = "^[a-z0-9\\s'\\.\\-]+$";
+    private static final String NAME_REGEX = "^[a-z0-9\\s'\\.\\-]{1,50}$";
     /**
      * First name
      */

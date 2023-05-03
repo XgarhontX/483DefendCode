@@ -30,7 +30,7 @@ def doInputPrompting(prompt, description):
 
     return result.strip()
 
-NAME_REGEX = "^[a-z0-9\s'\.\-]+$"
+NAME_REGEX = "^[a-z0-9\s'\.\-]{1,50}$"
 # First Name
 def promptNameFirst():
     return doRetreiveInput(
