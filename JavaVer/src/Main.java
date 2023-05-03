@@ -9,9 +9,13 @@ public class Main {
     public static void main(String[] args) {
         String nameFirst = promptNameFirst();
         String nameLast = promptNameLast();
+
+        int int1 = prompt2Ints1();
+        int int2 = prompt2Ints2();
     }
 
     private static final String NAME_REGEX = "^[a-z0-9\\s'\\.\\-]{1,50}$";
+
     /**
      * First name
      */
@@ -23,6 +27,7 @@ public class Main {
                 Pattern.CASE_INSENSITIVE
         );
     }
+
     /**
      * Last name
      */
@@ -36,10 +41,23 @@ public class Main {
     }
 
     /**
-     * 2 Ints
+     * 2 Ints 1st
      */
-    private static void prompt2Ints() {
+    private static int prompt2Ints1() {
+        return doInputPromptingInt(
+                "Enter the 1st int.",
+                "Range: (" + Integer.MIN_VALUE + ", " + Integer.MAX_VALUE + ")"
+        );
+    }
 
+    /**
+     * 2 Ints 2nd
+     */
+    private static int prompt2Ints2() {
+        return doInputPromptingInt(
+                "Enter the 2nd int.",
+                "Range: (" + Integer.MIN_VALUE + ", " + Integer.MAX_VALUE + ")"
+        );
     }
 
     /**
@@ -126,10 +144,36 @@ public class Main {
         String result = "";
         while (result.length() < 1) {
             String in = doInputPrompting(prompt, description);
-            if ((patternParam != null ? doRegex(Pattern.compile(regex, patternParam).matcher(in)) : doRegex(Pattern.compile(regex).matcher(in)) )== 1) {
+            if ((patternParam != null ? doRegex(Pattern.compile(regex, patternParam).matcher(in)) : doRegex(Pattern.compile(regex).matcher(in))) == 1) {
                 result = in;
             }
         }
+        return result;
+    }
+
+    private static int doRetrieveInputInt(String prompt, String description) {
+        Integer result = null;
+        while (result == null) {
+            result = doRetrieveInputInt(prompt, description);
+            if (result == null) {
+                System.out.println("No match found.");
+            }
+        }
+    }
+
+    private static int doInputPromptingInt(String prompt, String description) {
+        //print
+        System.out.println();
+        System.out.println(prompt);
+        System.out.println(description);
+        System.out.print("> ");
+
+        //read
+        String line = CONSOLE.nextLine().trim();
+        Scanner lineScanner = new Scanner(line);
+        int result = lineScanner.nextInt();
+        lineScanner.close();
+
         return result;
     }
 }
