@@ -91,7 +91,7 @@ public class Main {
             file = new File(fd.getDirectory() + fd.getFile());
             System.out.println(file.getAbsolutePath());
             if (!file.canRead()) { //can't read
-
+                System.out.println("File cannot be read.");
                 file = null;
             }
         }
@@ -135,7 +135,7 @@ public class Main {
                 }
             }
             if (!file.canWrite()) { //can't write
-                System.out.println("null\nFile cannot be read.");
+                System.out.println("File cannot be written to.");
                 file = null;
             }
         }
