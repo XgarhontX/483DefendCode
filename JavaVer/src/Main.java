@@ -20,7 +20,7 @@ public class Main {
         int int1 = prompt2Ints1();
         int int2 = prompt2Ints2();
 
-        String inPath = promptInFileName();
+        File inFile = promptInFileName();
         File outFile = promptOutFileName();
 
         System.exit(0);
@@ -75,7 +75,7 @@ public class Main {
     /**
      * Input file name/path
      */
-    private static String promptInFileName() {
+    private static File promptInFileName() {
         System.out.print("\nSelect the input file.\n> ");
 
         File file = null;
@@ -101,7 +101,7 @@ public class Main {
         }
 
         System.out.println();
-        return file.getAbsolutePath();
+        return file;
     }
 
     /**
