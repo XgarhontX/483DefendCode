@@ -1,5 +1,8 @@
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +21,7 @@ public class Main {
         int int2 = prompt2Ints2();
 
         String inPath = promptInFileName();
+        File outFile = promptOutFileName();
 
         System.exit(0);
     }
@@ -102,9 +106,49 @@ public class Main {
 
     /**
      * Output file name/path
+     *
+     * @return
      */
-    private static void promptOutFileName() {
+    private static File promptOutFileName() {
+        System.out.print("\nSelect the input file.\n> ");
 
+        File file = null;
+        while (file == null) {
+            FileDialog fd = new java.awt.FileDialog((Frame) null);
+            fd.setDirectory("./");
+            fd.setMultipleMode(false);
+            fd.setMode(FileDialog.SAVE);
+            fd.setTitle("Select the output file.");
+            fd.setAlwaysOnTop(true);
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            fd.setLocation(screenSize.width / 2, screenSize.height / 2);
+            fd.setAutoRequestFocus(true);
+            fd.setFilenameFilter(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return false;
+                }
+            });
+            fd.setVisible(true);
+
+            //test for valid file
+            file = new File(fd.getDirectory() + fd.getFile()); //User can overwrite non-admin files TODO fix or leave?
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (!file.canWrite()) { //can't write
+                file = null;
+            } else { //valid, print path for user
+                System.out.println(fd.getDirectory() + fd.getFile());
+            }
+        }
+
+        System.out.println();
+        return file;
     }
 
     /**
