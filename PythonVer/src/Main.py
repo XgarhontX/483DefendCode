@@ -56,13 +56,13 @@ def doInputPromptingInt(prompt, description):
 
     return result
 ########################################################################################################################
-NAME_REGEX = "^(?=.*[a-z]+.*)[a-z0-9\s'\.\-]{1,50}$"
+REGEX_NAME = "^(?=.*[a-z]+.*)[a-z0-9\s'\.\-]{1,50}$"
 # First Name
 def promptNameFirst():
     return doRetreiveInput(
         "Enter a first name.",
         "50 chars max: [A-Z, 0-9, ', ., -]",
-        NAME_REGEX,
+        REGEX_NAME,
         re.IGNORECASE
     )
 
@@ -71,7 +71,7 @@ def promptNameLast():
     return doRetreiveInput(
         "Enter a last name.",
         "50 chars max: [A-Z, 0-9, ', ., -]",
-        NAME_REGEX,
+        REGEX_NAME,
         re.IGNORECASE
     )
 
