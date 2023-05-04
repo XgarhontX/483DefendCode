@@ -104,8 +104,29 @@ def promptInFileName():
     return path
 
 # Output file name/path
-def promptOutFileName():
-    return
+def promptOutFileName(inPath):
+    print("\nSelect the output file.\n> ", end="")
+
+    file = None
+    path = None
+    while file == None:
+        path = tkinter.filedialog.asksaveasfilename(initialdir="./", title="Select the output file.")
+
+        # check if same as input
+        if path == inPath:
+            print(path)
+            path = None
+            print("Output was the same as input file.\n\nSelect the output file.\n> ", end="")
+            continue
+
+        # try to write to validate
+        file = open(path, 'w')
+        if not file.writable():
+            file = None
+        file.close()
+
+    print(path)
+    return path
 
 # Password, hashed and salted
 def promptPassword():
@@ -126,10 +147,11 @@ def writeOutput():
 if __name__ == '__main__':
     print("\nPYTHON VERSION")
 
-    nameFirst = promptNameFirst()
-    nameLast = promptNameLast()
-
-    int1 = prompt2Ints1()
-    int2 = prompt2Ints2()
-
+    # nameFirst = promptNameFirst()
+    # nameLast = promptNameLast()
+    #
+    # int1 = prompt2Ints1()
+    # int2 = prompt2Ints2()
+    #
     inPath = promptInFileName()
+    outPath = promptOutFileName(inPath)
