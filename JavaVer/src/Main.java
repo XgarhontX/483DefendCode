@@ -22,7 +22,7 @@ public class Main {
         System.exit(0);
     }
 
-    private static final String NAME_REGEX = "^[a-z0-9\\s'\\.\\-]{1,50}$";
+    private static final String NAME_REGEX = "^(?=.*[a-z]+.*)[a-z0-9\\s'\\.\\-]{1,50}$";
 
     /**
      * First name

@@ -54,7 +54,7 @@ def doInputPromptingInt(prompt, description):
 
     return result
 ########################################################################################################################
-NAME_REGEX = "^[a-z0-9\s'\.\-]{1,50}$"
+NAME_REGEX = "^(?=.*[a-z]+.*)[a-z0-9\s'\.\-]{1,50}$"
 # First Name
 def promptNameFirst():
     return doRetreiveInput(
