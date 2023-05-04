@@ -1,4 +1,5 @@
 import re
+import tkinter.filedialog
 
 def doRetreiveInput(prompt, description, regex, pattern_param):
     result = None
@@ -47,7 +48,7 @@ def doInputPromptingInt(prompt, description):
         print("No match found.")
         return None
 
-    #check range
+    # check range
     if (result < -2147483648 or result > 2147483647):
         print("No match found.")
         return None
@@ -88,7 +89,19 @@ def prompt2Ints2():
 
 # Input file name/path
 def promptInFileName():
-    return
+    print("\nSelect the input file.\n> ", end="")
+
+    file = None
+    path = None
+    while file == None:
+        path = tkinter.filedialog.askopenfilename(initialdir="./", title="Select the input file.")
+        file = open(path, 'r')
+        if not file.readable():
+            file = None
+        file.close()
+
+    print(path)
+    return path
 
 # Output file name/path
 def promptOutFileName():
@@ -112,7 +125,11 @@ def writeOutput():
 
 if __name__ == '__main__':
     print("\nPYTHON VERSION")
+
     nameFirst = promptNameFirst()
     nameLast = promptNameLast()
+
     int1 = prompt2Ints1()
     int2 = prompt2Ints2()
+
+    inPath = promptInFileName()
