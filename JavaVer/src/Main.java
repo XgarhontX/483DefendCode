@@ -76,14 +76,14 @@ public class Main {
 
         File file = null;
         while (file == null) {
-            Frame frame = new Frame();
-            FileDialog fd = new java.awt.FileDialog(frame);
+            FileDialog fd = new java.awt.FileDialog((Frame) null);
             fd.setDirectory("./");
             fd.setMultipleMode(false);
             fd.setMode(FileDialog.LOAD);
             fd.setTitle("Select the input file.");
             fd.setAlwaysOnTop(true);
-            fd.setLocation();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            fd.setLocation(screenSize.width / 2, screenSize.height / 2);
             fd.setAutoRequestFocus(true);
             fd.setVisible(true);
 
