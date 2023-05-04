@@ -1,7 +1,5 @@
 import java.awt.*;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -21,7 +19,7 @@ public class Main {
         int int2 = prompt2Ints2();
 
         File inFile = promptInFileName();
-        File outFile = promptOutFileName();
+        File outFile = promptOutFileName(inFile);
 
         System.exit(0);
     }
@@ -76,31 +74,28 @@ public class Main {
      * Input file name/path
      */
     private static File promptInFileName() {
-        System.out.print("\nSelect the input file.\n> ");
-
         File file = null;
         while (file == null) {
-            FileDialog fd = new java.awt.FileDialog((Frame) null);
-            fd.setDirectory("./");
-            fd.setMultipleMode(false);
-            fd.setMode(FileDialog.LOAD);
-            fd.setTitle("Select the input file.");
-            fd.setAlwaysOnTop(true);
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            fd.setLocation(screenSize.width / 2, screenSize.height / 2);
-            fd.setAutoRequestFocus(true);
-            fd.setVisible(true);
+            System.out.print("\nSelect the input file.\n> ");
+
+            FileDialog fd = new java.awt.FileDialog((Frame) null, "Select the input file.", FileDialog.LOAD);
+            setupFD(fd);
+
+            //if user cancels
+            if (fd.getFile() == null) {
+                System.out.println("null\nNo file selected.");
+                continue;
+            }
 
             //test for valid file
             file = new File(fd.getDirectory() + fd.getFile());
-            if (file != null && !file.canRead()) { //can't read
+            System.out.println(file.getAbsolutePath());
+            if (!file.canRead()) { //can't read
+
                 file = null;
-            } else { //valid, print path for user
-                System.out.println(fd.getDirectory() + fd.getFile());
             }
         }
 
-        System.out.println();
         return file;
     }
 
@@ -109,46 +104,53 @@ public class Main {
      *
      * @return
      */
-    private static File promptOutFileName() {
-        System.out.print("\nSelect the input file.\n> ");
-
+    private static File promptOutFileName(File inFile) {
         File file = null;
         while (file == null) {
-            FileDialog fd = new java.awt.FileDialog((Frame) null);
-            fd.setDirectory("./");
-            fd.setMultipleMode(false);
-            fd.setMode(FileDialog.SAVE);
-            fd.setTitle("Select the output file.");
-            fd.setAlwaysOnTop(true);
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            fd.setLocation(screenSize.width / 2, screenSize.height / 2);
-            fd.setAutoRequestFocus(true);
-            fd.setFilenameFilter(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return false;
-                }
-            });
-            fd.setVisible(true);
+            System.out.print("\nSelect the output file.\n> ");
 
-            //test for valid file
+            FileDialog fd = new java.awt.FileDialog((java.awt.Frame) null, "Select the output file.", FileDialog.SAVE);
+            setupFD(fd);
+
+            //if user cancels
+            if (fd.getFile() == null) {
+                System.out.println("null\nNo file selected.");
+                continue;
+            }
+
             file = new File(fd.getDirectory() + fd.getFile()); //User can overwrite non-admin files TODO fix or leave?
+            System.out.println(file.getAbsolutePath());
+            //check if same as input
+            if (file.equals(inFile)) {
+                System.out.println("Output file was the same as input.");
+                file = null;
+                continue;
+            }
+            //test for valid file
             if (!file.exists()) {
                 try {
                     file.createNewFile();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    file = null;
                 }
             }
             if (!file.canWrite()) { //can't write
+                System.out.println("null\nFile cannot be read.");
                 file = null;
-            } else { //valid, print path for user
-                System.out.println(fd.getDirectory() + fd.getFile());
             }
         }
 
-        System.out.println();
         return file;
+    }
+
+    private static void setupFD(FileDialog fd) {
+        fd.setDirectory("./");
+        fd.setMultipleMode(false);
+        fd.setAlwaysOnTop(true);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        fd.setLocation(screenSize.width / 2, screenSize.height / 2);
+        fd.setAutoRequestFocus(true);
+        fd.setVisible(true);
     }
 
     /**
