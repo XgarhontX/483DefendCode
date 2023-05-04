@@ -1,3 +1,5 @@
+import java.awt.*;
+import java.io.File;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,11 +10,16 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("\nJAVA VERSION");
+
         String nameFirst = promptNameFirst();
         String nameLast = promptNameLast();
 
         int int1 = prompt2Ints1();
         int int2 = prompt2Ints2();
+
+        String inPath = promptInFileName();
+
+        System.exit(0);
     }
 
     private static final String NAME_REGEX = "^[a-z0-9\\s'\\.\\-]{1,50}$";
@@ -64,8 +71,33 @@ public class Main {
     /**
      * Input file name/path
      */
-    private static void promptInFileName() {
+    private static String promptInFileName() {
+        System.out.print("\nSelect the input file.\n> ");
 
+        File file = null;
+        while (file == null) {
+            Frame frame = new Frame();
+            FileDialog fd = new java.awt.FileDialog(frame);
+            fd.setDirectory("./");
+            fd.setMultipleMode(false);
+            fd.setMode(FileDialog.LOAD);
+            fd.setTitle("Select the input file.");
+            fd.setAlwaysOnTop(true);
+            fd.setLocation();
+            fd.setAutoRequestFocus(true);
+            fd.setVisible(true);
+
+            //test for valid file
+            file = new File(fd.getDirectory() + fd.getFile());
+            if (file != null && !file.canRead()) { //can't read
+                file = null;
+            } else { //valid, print path for user
+                System.out.println(fd.getDirectory() + fd.getFile());
+            }
+        }
+
+        System.out.println();
+        return file.getAbsolutePath();
     }
 
     /**
