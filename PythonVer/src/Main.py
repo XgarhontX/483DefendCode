@@ -1,3 +1,4 @@
+import os
 import re
 import tkinter.filedialog
 
@@ -89,43 +90,54 @@ def prompt2Ints2():
 
 # Input file name/path
 def promptInFileName():
-    print("\nSelect the input file.\n> ", end="")
-
     file = None
     path = None
     while file == None:
+        print("\nSelect the input file.\n> ", end="")
         path = tkinter.filedialog.askopenfilename(initialdir="./", title="Select the input file.")
+
+        # handle cancel
+        if (path == None or path == ""):
+            print("null\nNo file selected.")
+            continue
+        print(path)
+
         file = open(path, 'r')
         if not file.readable():
             file = None
         file.close()
 
-    print(path)
+
     return path
 
 # Output file name/path
 def promptOutFileName(inPath):
-    print("\nSelect the output file.\n> ", end="")
-
     file = None
     path = None
     while file == None:
+        print("\nSelect the output file.\n> ", end="")
         path = tkinter.filedialog.asksaveasfilename(initialdir="./", title="Select the output file.")
+
+        # handle cancel
+        if (path == None or path == ""):
+            print("null\nNo file selected.")
+            continue
+        print(path)
 
         # check if same as input
         if path == inPath:
-            print(path)
             path = None
-            print("Output was the same as input file.\n\nSelect the output file.\n> ", end="")
+            print("Output file was the same as input.")
             continue
 
         # try to write to validate
         file = open(path, 'w')
         if not file.writable():
             file = None
+
+        # cleanup
         file.close()
 
-    print(path)
     return path
 
 # Password, hashed and salted
@@ -147,11 +159,11 @@ def writeOutput():
 if __name__ == '__main__':
     print("\nPYTHON VERSION")
 
-    # nameFirst = promptNameFirst()
-    # nameLast = promptNameLast()
-    #
-    # int1 = prompt2Ints1()
-    # int2 = prompt2Ints2()
-    #
+    nameFirst = promptNameFirst()
+    nameLast = promptNameLast()
+
+    int1 = prompt2Ints1()
+    int2 = prompt2Ints2()
+
     inPath = promptInFileName()
     outPath = promptOutFileName(inPath)
