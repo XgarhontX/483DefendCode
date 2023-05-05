@@ -1,0 +1,10 @@
+First Name: poop
+
+Last Name: wa
+
+int1 + int2: 2
+
+int1 * int2: 1
+
+Copy of D:/HTML Proj/483DefendCode/PythonVer/in.txt:
+yomama
