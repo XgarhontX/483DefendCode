@@ -3,15 +3,15 @@ import hashlib
 import re
 
 REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\d]+)(?=.*[^A-za-z\d]+)[ -~]{8,50}$"
+class DBMS:
+    def __init__(self):
+        self.dbms_passwordHashed = ""
+        self.dbms_passwordSalt = ""
 class WebServiceConnection:
-    class DBMS:
-        def __int__(self):
-            self.dbms_passwordHashed = ""
-            self.dbms_passwordSalt = ""
-    def __int__(self):
+    def __init__(self):
         self.myDBMS = DBMS()
 
-    def doRegex(password):
+    def doRegex(self, password):
         regexc = re.compile(REGEX_PASSWORD)
         result = regexc.match(password)
         if result == None:
@@ -20,9 +20,9 @@ class WebServiceConnection:
         return True
 
     # https://www.geeksforgeeks.org/how-to-hash-passwords-in-python/
-    def authPost(password):
+    def authPost(self, password):
         # regex check
-        if not doRegex(password):
+        if not self.doRegex(password):
             return "{\n" + "  \"success\": false,\n" + "  \"message\": \"Password doesn't meet requirements.\"\n" + "}"
 
         # passwrod to bytes
@@ -36,11 +36,11 @@ class WebServiceConnection:
 
         return "{\n" +  "  \"success\": true,\n" +"  \"message\": \"Password stored.\"\n" + "}"
 
-    def authGET(password):
+    def authGET(self, password):
         failedResponse = "{\n" + "  \"success\": false,\n" + "  \"message\": \"Password doesn't match.\"\n" + "}"
 
         # regex check
-        if not doRegex(password):
+        if not self.doRegex(password):
             return failedResponse
 
         # hask and check
