@@ -24,6 +24,8 @@ public class Main {
         promptPassword();
         promptPasswordRetype();
 
+        writeOutput(nameFirst, nameLast, int1, int2, inFile, outFile);
+
         System.exit(0);
     }
 
@@ -78,20 +80,20 @@ public class Main {
     private static File promptInFileName() {
         File file = null;
         while (file == null) {
-            System.out.print("\nSelect the input file.\n> ");
+            System.out.print("\nSelect the input file.\n(A File Browser was opened.)");
 
             FileDialog fd = new java.awt.FileDialog((Frame) null, "Select the input file.", FileDialog.LOAD);
             setupFD(fd);
 
             //if user cancels
             if (fd.getFile() == null) {
-                System.out.println("null\nNo file selected.");
+                System.out.println("\n> null\nNo file selected.");
                 continue;
             }
 
             //test for valid file
             file = new File(fd.getDirectory() + fd.getFile());
-            System.out.println(file.getAbsolutePath());
+            System.out.println("\n> " + file.getAbsolutePath());
             if (!file.canRead()) { //can't read
                 System.out.println("File cannot be read.");
                 file = null;
@@ -109,19 +111,19 @@ public class Main {
     private static File promptOutFileName(File inFile) {
         File file = null;
         while (file == null) {
-            System.out.print("\nSelect the output file.\n> ");
+            System.out.print("\nSelect the output file.\n(A File Browser was opened.)");
 
             FileDialog fd = new java.awt.FileDialog((java.awt.Frame) null, "Select the output file.", FileDialog.SAVE);
             setupFD(fd);
 
             //if user cancels
             if (fd.getFile() == null) {
-                System.out.println("null\nNo file selected.");
+                System.out.println("\n> null\nNo file selected.");
                 continue;
             }
 
             file = new File(fd.getDirectory() + fd.getFile()); //User can overwrite non-admin files TODO fix or leave?
-            System.out.println(file.getAbsolutePath());
+            System.out.println("\n> " + file.getAbsolutePath());
             //check if same as input
             if (file.equals(inFile)) {
                 System.out.println("Output file was the same as input.");
@@ -213,7 +215,7 @@ public class Main {
      * - writes the contents of the input file <br>
      * - Each thing written should be clearly labeled (e.g. First name, Last name, First Integer, Second Integer, Sum, Product, Input File Name, Input file contents)
      */
-    private static void writeOutput() {
+    private static void writeOutput(String nameFirst, String nameLast, int int1, int int2, File inFile, File outFile) {
 
     }
 
