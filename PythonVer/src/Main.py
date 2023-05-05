@@ -40,6 +40,7 @@ def doInputPrompting(prompt, description):
 
 
 ########################################################################################################################
+INTEGER_MAX = 2147483647
 def doRetreiveInputInt(prompt, description):
     result = None
     while result == None:
@@ -62,7 +63,7 @@ def doInputPromptingInt(prompt, description):
         return None
 
     # check range
-    if (result < -2147483648 or result > 2147483647):
+    if (result < -INTEGER_MAX or result > INTEGER_MAX):
         print("No match found.")
         return None
 
@@ -216,8 +217,12 @@ def writeOutput(nameFirst, nameLast, int1, int2, inPath, outPath):
         f = open(outPath, 'w')
         f.write("First Name: " + nameFirst + "\n\n")
         f.write("Last Name: " + nameLast + "\n\n")
-        f.write("int1 + int2: " + str(int1 + int2) + "\n\n")  # ints are arbitrary, int1+int2 will not exceed
-        f.write("int1 * int2: " + str(int1 * int2) + "\n\n")  # ints are arbitrary, int1*int2 will not exceed
+        f.write("int1: " + str(int1) + "\n\n")
+        f.write("int2: " + str(int2) + "\n\n")
+        temp = int1 + int2
+        f.write("int1 + int2: " + str(temp) + " " + writeIntOverflow(temp) + "\n\n")  # ints are arbitrary, int1+int2 will not exceed
+        temp = int1 * int2
+        f.write("int1 * int2: " + str(temp) + " " + writeIntOverflow(temp) + "\n\n")  # ints are arbitrary, int1*int2 will not exceed
         f.write("Copy of " + inPath + ":\n")
         f.close()
 
@@ -242,6 +247,8 @@ def writeOutput(nameFirst, nameLast, int1, int2, inPath, outPath):
     except:
         print("Error opening a preview of " + outPath)
     return
+def writeIntOverflow(int):
+    return "(Overflow Detected)" if (int > INTEGER_MAX or int < -INTEGER_MAX) else ""
 
 
 if __name__ == '__main__':
