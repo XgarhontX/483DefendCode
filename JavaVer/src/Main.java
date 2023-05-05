@@ -226,7 +226,7 @@ public class Main {
             fw.write("Last Name: " + nameLast + "\n\n");
             fw.write("int1 + int2: " + add2IntsOverflow(int1,int2) + "\n\n");
             fw.write("int1 * int2: " + multiply2IntsOverflow(int1,int2) + "\n\n");
-            fw.write("Copy of " + inFile.getName() + ":\n");
+            fw.write("Copy of " + inFile.getAbsolutePath() + ":\n");
             fileWriteBytePerByte(fw, inFile);
             fw.close();
         } catch (IOException e) {
