@@ -1,12 +1,12 @@
+import ServerSide.WebServiceAndDBMS;
+
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
-    private static final boolean DEBUG_ECHO = false;
     private static final Scanner CONSOLE = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -21,11 +21,13 @@ public class Main {
         File inFile = promptInFileName();
         File outFile = promptOutFileName(inFile);
 
+        promptPassword();
+        promptPasswordRetype();
+
         System.exit(0);
     }
 
-    private static final String NAME_REGEX = "^(?=.*[a-z]+.*)[a-z0-9\\s'\\.\\-]{1,50}$";
-
+    private static final String REGEX_NAME = "^(?=.*[a-z]+.*)[a-z0-9\\s'\\.\\-]{1,50}$";
     /**
      * First name
      */
@@ -33,7 +35,7 @@ public class Main {
         return doRetrieveInput(
                 "Enter a first name.",
                 "50 chars max: [A-Z, 0-9, ', ., -]",
-                NAME_REGEX,
+                REGEX_NAME,
                 Pattern.CASE_INSENSITIVE
         );
     }
@@ -45,7 +47,7 @@ public class Main {
         return doRetrieveInput(
                 "Enter a last name.",
                 "50 chars max: [A-Z, 0-9, ', ., -]",
-                NAME_REGEX,
+                REGEX_NAME,
                 Pattern.CASE_INSENSITIVE
         );
     }
@@ -153,18 +155,55 @@ public class Main {
         fd.setVisible(true);
     }
 
+    private static final String REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\\d]+)[ -~]{8,50}$";
     /**
-     * Password, hashed and salted
+     * Password, then send to server
      */
     private static void promptPassword() {
+        boolean success = false;
+        while (!success) {
+            String password = doRetrieveInput(
+                    "Enter a password.",
+                    "8 to 50 chars & must include:\n\t-Only ASCII\n\t-An uppercase letter\n\t-An lowers letter\n\t-A number\n\t-A special char",
+                    REGEX_PASSWORD,
+                    null
+            );
 
+            //Super real async HTTPS POST request
+            String response = WebServiceAndDBMS.authPOST(password);
+
+            //parse response for success
+            if (response.contains("\"success\": true") && response.contains("\"message\": \"Password stored.\"")) {
+                success = true; //should default to this unless WebServer is broken
+            } else {
+                System.out.println("No match found.");
+            }
+        }
     }
 
     /**
-     * Password verification by hashed and salted then compare
+     * Password verification by sending to server
      */
     private static void promptPasswordRetype() {
+        boolean success = false;
+        while (!success) {
+            String password = doRetrieveInput(
+                    "Retype your password.",
+                    "",
+                    REGEX_PASSWORD,
+                    null
+            );
 
+            //Super real async HTTPS POST request
+            String response = WebServiceAndDBMS.authGET(password);
+
+            //parse response for success
+            if (response.contains("\"success\": true") && response.contains("\"message\": \"Password matched.\"")) {
+                success = true; //should default to this unless WebServer is broken
+            } else {
+                System.out.println("No match found.");
+            }
+        }
     }
 
     /**
@@ -188,17 +227,8 @@ public class Main {
     private static int doRegex(Matcher matcher) {
         int found = 0;
         if (matcher.find()) {
-            if (DEBUG_ECHO) {
-                System.out.printf("\"%s\": Found match from index %d to %d.\n",
-                        matcher.group(), matcher.start(), matcher.end());
-            }
             found++;
         }
-//        while (matcher.find()) {
-//            System.out.printf("\"%s\": Found match \"%s\" from index %d to %d.\n",
-//                    matcherString, matcher.group(), matcher.start(), matcher.end());
-//            found++;
-//        }
         if (found == 0) {
             System.out.println("No match found.");
         }
@@ -221,7 +251,7 @@ public class Main {
         //print
         System.out.println();
         System.out.println(prompt);
-        System.out.println(description);
+        if (!description.equals("")) { System.out.println(description); }
         System.out.print("> ");
 
         //read
