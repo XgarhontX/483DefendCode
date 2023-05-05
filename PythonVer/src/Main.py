@@ -144,7 +144,6 @@ def promptOutFileName(inPath):
     return path
 
 REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\d]+)(?=.*[^A-za-z\d]+)[ -~]{8,50}$"
-WEB_SERVICE_CONNECTION = ServerSide.WebServiceAndDBMS.WebServiceConnection()
 # Password, hashed and salted
 def promptPassword():
     success = False
@@ -158,7 +157,7 @@ def promptPassword():
         )
 
         # extremely true to life async HTTPS request and response parsing
-        response = json.loads(WEB_SERVICE_CONNECTION.authPost(password))
+        response = json.loads(ServerSide.WebServiceAndDBMS.authPost(password))
         if response["success"] == True and response["message"] == "Password stored.":
             success = True
         else:
@@ -177,7 +176,7 @@ def promptPasswordRetype():
         )
 
         # extremely true to life async HTTPS request and response parsing
-        response = json.loads(WEB_SERVICE_CONNECTION.authGET(password))
+        response = json.loads(ServerSide.WebServiceAndDBMS.authGET(password))
         if response["success"] == True and response["message"] == "Password matched.":
             success = True
         else:
