@@ -5,7 +5,6 @@ import java.io.*;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -86,8 +85,9 @@ public class Main {
         while (file == null) {
             System.out.print("\nSelect the input file.\n(A File Browser was opened.)");
 
-            FileDialog fd = new java.awt.FileDialog((Frame) null, "Select the input file.", FileDialog.LOAD);
+            FileDialog fd = new FileDialog((Frame) null, "Select the input file.", FileDialog.LOAD);
             setupFD(fd);
+            fd.setVisible(true);
 
             //if user cancels
             if (fd.getFile() == null) {
@@ -117,8 +117,10 @@ public class Main {
         while (file == null) {
             System.out.print("\nSelect the output file.\n(A File Browser was opened.)");
 
-            FileDialog fd = new java.awt.FileDialog((java.awt.Frame) null, "Select the output file.", FileDialog.SAVE);
+            FileDialog fd = new FileDialog((Frame) null, "Select the output file.", FileDialog.SAVE);
             setupFD(fd);
+//            fd.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".txt"));
+            fd.setVisible(true);
 
             //if user cancels
             if (fd.getFile() == null) {
@@ -158,7 +160,6 @@ public class Main {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         fd.setLocation(screenSize.width / 2, screenSize.height / 2);
         fd.setAutoRequestFocus(true);
-        fd.setVisible(true);
     }
 
     private static final String REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\\d]+)(?=.*[^A-za-z\\d]+)[ -~]{8,50}$";
