@@ -224,6 +224,8 @@ public class Main {
             FileWriter fw = new FileWriter(outFile);
             fw.write("First Name: " + nameFirst + "\n\n");
             fw.write("Last Name: " + nameLast + "\n\n");
+            fw.write("int1: " + int1 + "\n\n");
+            fw.write("int2: " + int2 + "\n\n");
             fw.write("int1 + int2: " + add2IntsOverflow(int1,int2) + "\n\n");
             fw.write("int1 * int2: " + multiply2IntsOverflow(int1,int2) + "\n\n");
             fw.write("Copy of " + inFile.getAbsolutePath() + ":\n");
