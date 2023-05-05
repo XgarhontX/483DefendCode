@@ -2,6 +2,10 @@ import ServerSide.WebServiceAndDBMS;
 
 import java.awt.*;
 import java.io.*;
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -216,7 +220,53 @@ public class Main {
      * - Each thing written should be clearly labeled (e.g. First name, Last name, First Integer, Second Integer, Sum, Product, Input File Name, Input file contents)
      */
     private static void writeOutput(String nameFirst, String nameLast, int int1, int int2, File inFile, File outFile) {
+        try {
+            FileWriter fw = new FileWriter(outFile);
+            fw.write("First Name: " + nameFirst + "\n\n");
+            fw.write("Last Name: " + nameLast + "\n\n");
+            fw.write("int1 + int2: " + add2IntsOverflow(int1,int2) + "\n\n");
+            fw.write("int1 * int2: " + multiply2IntsOverflow(int1,int2) + "\n\n");
+            fw.write("Copy of " + inFile.getName() + ":\n");
+            fileWriteBytePerByte(fw, inFile);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error while writing to " + outFile.getAbsolutePath());
+            System.out.println(e.getMessage());
+        }
 
+        //Open Output file for preview
+        try {
+            Desktop.getDesktop().open(outFile);
+        } catch (IOException e) {
+            System.out.println("Error opening a preview of " + outFile.getAbsolutePath());
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static String add2IntsOverflow(int int1, int int2) {
+        try {
+            return "" + Math.addExact(int1, int2);
+        } catch (ArithmeticException e) {
+            return ((long)int1 + (long)int2) + " (Overflow Detected)";
+        }
+    }
+    private static String multiply2IntsOverflow(int int1, int int2) {
+        try {
+            return String.valueOf(Math.multiplyExact(int1, int2));
+        } catch (ArithmeticException e) {
+            return new BigInteger(String.valueOf(int1)).multiply(new BigInteger(String.valueOf(int2))) + " (Overflow Detected)";
+        }
+    }
+    private static void fileWriteBytePerByte(FileWriter fw, File inFile) { //https://howtodoinjava.com/java/io/read-file-content-into-byte-array/
+        try {
+            byte[] bytes = Files.readAllBytes(Path.of(inFile.getAbsolutePath()));
+            for (int i = 0; i < bytes.length; i++) {
+                fw.write(bytes[i]);
+            }
+        } catch (IOException e) {
+            System.out.println("Error while copying " + inFile.getAbsolutePath());
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
