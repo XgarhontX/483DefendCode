@@ -17,7 +17,7 @@ public class WebServiceAndDBMS {
     private static byte[] dbms_passwordSalt = null;
 
     //regex
-    private static final String REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\\d]+)[ -~]{8,50}$";
+    private static final String REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\\d]+)(?=.*[^A-za-z\\d]+)[ -~]{8,50}$";
 
     //https://www.baeldung.com/java-password-hashing
     public static String authPOST(String password) {

@@ -1,8 +1,11 @@
 import os
 import re
 import tkinter.filedialog
+import ServerSide
+import ServerSide.WebServiceAndDBMS
+import json # https://www.w3schools.com/python/python_json.asp
 
-def doRetreiveInput(prompt, description, regex, pattern_param):
+def doRetreiveInput(prompt, description, regex, pattern_param = None):
     result = None
     while result == None:
         # get input
@@ -17,7 +20,7 @@ def doRetreiveInput(prompt, description, regex, pattern_param):
         result = regexc.match(string)
         if result == None: print("No match found.")
 
-    return result
+    return result.string
 def doInputPrompting(prompt, description):
     # print
     print()
@@ -140,12 +143,42 @@ def promptOutFileName(inPath):
 
     return path
 
+REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\d]+)(?=.*[^A-za-z\d]+)[ -~]{8,50}$"
+WEB_SERVICE_CONNECTION = ServerSide.WebServiceAndDBMS.WebServiceConnection()
 # Password, hashed and salted
 def promptPassword():
+    success = False
+    while not success:
+        # regex
+        password = doRetreiveInput(
+            "Ender a password",
+            "8 to 50 chars & must include:\n\t-Only ASCII\n\t-An uppercase letter\n\t-An lowers letter\n\t-A number\n\t-A special char",
+            REGEX_PASSWORD,
+            None
+        )
+        print(password)
+
+        # extremely true to life async HTTPS request and response parsing
+        response = json.loads(WEB_SERVICE_CONNECTION.authPost(password))
+        if response["success"] == True and reponse["message"] == "Password stored.":
+            success = true
     return
 
 # Password verification by hashed and salted then compare
 def promptPasswordRetype():
+    success = False
+    while not success:
+        # regex
+        password = doRetreiveInput(
+            "Ender a password",
+            "8 to 50 chars & must include:\n\t-Only ASCII\n\t-An uppercase letter\n\t-An lowers letter\n\t-A number\n\t-A special char",
+            REGEX_PASSWORD
+        )
+
+    # extremely true to life async HTTPS request and response parsing
+    response = json.loads(WEB_SERVICE_CONNECTION.authGET(password))
+    if response["success"] == True and reponse["message"] == "Password matched.":
+        success = true
     return
 
 # -writes the user's name
@@ -160,10 +193,14 @@ if __name__ == '__main__':
     print("\nPYTHON VERSION")
 
     nameFirst = promptNameFirst()
-    nameLast = promptNameLast()
+    print(nameFirst)
+    # nameLast = promptNameLast()
 
-    int1 = prompt2Ints1()
-    int2 = prompt2Ints2()
+    # int1 = prompt2Ints1()
+    # int2 = prompt2Ints2()
+    #
+    # inPath = promptInFileName()
+    # outPath = promptOutFileName(inPath)
 
-    inPath = promptInFileName()
-    outPath = promptOutFileName(inPath)
+    promptPassword()
+    promptPasswordRetype()

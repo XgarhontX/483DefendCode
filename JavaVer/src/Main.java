@@ -155,7 +155,7 @@ public class Main {
         fd.setVisible(true);
     }
 
-    private static final String REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\\d]+)[ -~]{8,50}$";
+    private static final String REGEX_PASSWORD = "^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[\\d]+)(?=.*[^A-za-z\\d]+)[ -~]{8,50}$";
     /**
      * Password, then send to server
      */
