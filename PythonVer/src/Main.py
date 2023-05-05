@@ -25,7 +25,7 @@ def doInputPrompting(prompt, description):
     # print
     print()
     print(prompt)
-    print(description)
+    if description != None: print(description)
     print('>', end=" ")
 
     # read
@@ -148,7 +148,7 @@ WEB_SERVICE_CONNECTION = ServerSide.WebServiceAndDBMS.WebServiceConnection()
 # Password, hashed and salted
 def promptPassword():
     success = False
-    while not success:
+    while success == False:
         # regex
         password = doRetreiveInput(
             "Ender a password",
@@ -156,29 +156,32 @@ def promptPassword():
             REGEX_PASSWORD,
             None
         )
-        print(password)
 
         # extremely true to life async HTTPS request and response parsing
         response = json.loads(WEB_SERVICE_CONNECTION.authPost(password))
-        if response["success"] == True and reponse["message"] == "Password stored.":
-            success = true
+        if response["success"] == True and response["message"] == "Password stored.":
+            success = True
+        else:
+            print("No match found.")
     return
 
 # Password verification by hashed and salted then compare
 def promptPasswordRetype():
     success = False
-    while not success:
+    while success == False:
         # regex
         password = doRetreiveInput(
-            "Ender a password",
-            "8 to 50 chars & must include:\n\t-Only ASCII\n\t-An uppercase letter\n\t-An lowers letter\n\t-A number\n\t-A special char",
+            "Retype your password",
+            None,
             REGEX_PASSWORD
         )
 
-    # extremely true to life async HTTPS request and response parsing
-    response = json.loads(WEB_SERVICE_CONNECTION.authGET(password))
-    if response["success"] == True and reponse["message"] == "Password matched.":
-        success = true
+        # extremely true to life async HTTPS request and response parsing
+        response = json.loads(WEB_SERVICE_CONNECTION.authGET(password))
+        if response["success"] == True and response["message"] == "Password matched.":
+            success = True
+        else:
+            print("No match found.")
     return
 
 # -writes the user's name
@@ -192,8 +195,7 @@ def writeOutput():
 if __name__ == '__main__':
     print("\nPYTHON VERSION")
 
-    nameFirst = promptNameFirst()
-    print(nameFirst)
+    # nameFirst = promptNameFirst()
     # nameLast = promptNameLast()
 
     # int1 = prompt2Ints1()
